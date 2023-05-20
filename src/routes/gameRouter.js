@@ -12,7 +12,7 @@ router.post("/", function (req, res) {
   }
   else
   {
-    res.status(400)
+    res.status(400).send("Missing name parameter")
   }
 })
 
