@@ -1,84 +1,42 @@
 import * as db from "../database"
 import { shuffle } from "lodash"
 
-
-
-// Créer et retourne un deck mélangé avec 3 chameaux en moins.
+// Return a shuffled starting deck except 3 camels
 export function initDeck() {
-  // TODO
-  // Créer un tableau vide
-  let deck=[];
-  // Ajouter les diamants, l'or, l'argent, les tissus, les épices, le cuir et les chameaux
-  for(let i=0;i<6;i++)
-  {
-    deck.push("diamond")
-    deck.push("gold")
-    deck.push("silver")
-    deck.push("cloth")
-    deck.push("spice")
-    deck.push("leather")
-    deck.push("camel")
+  const deck = []
+  for (let i = 0; i < 6; i++) deck.push("diamonds")
+  for (let i = 0; i < 6; i++) deck.push("gold")
+  for (let i = 0; i < 6; i++) deck.push("silver")
+  for (let i = 0; i < 8; i++) deck.push("cloth")
+  for (let i = 0; i < 8; i++) deck.push("spice")
+  for (let i = 0; i < 10; i++) deck.push("leather")
+  for (let i = 0; i < 11 - 3; i++) deck.push("camel")
+  return shuffle(deck)
+}
 
-  }
-  for(let i=0;i<2;i++)
-  {
-    
-    deck.push("cloth")
-    deck.push("spice")
-    deck.push("leather")
-    deck.push("camel")
-
-  }
-  for(let i=0;i<2;i++)
-  {
-    deck.push("leather")
-  }
-
-  
-  // Retourner le tableau remplis
-  return shuffle(deck)}
-
-// Pioche x cartes d'un deck.
+// Draw {count} cards of a deck
 export function drawCards(deck, count = 1) {
-  // TODO
-  // Créer un tableau vide
-  let drawCards=[]
-  // Pour chaque carte à piocher:
-  for(leti=0;i<count;i++)
-  {
-    //  Retirer la carte piochée du deck et la mettre dans le tableau
-    drawCards.push(deck.pop())
-
+  const drawnCards = []
+  for (let i = 0; i < count; i++) {
+    drawnCards.push(deck.shift())
   }
-  
-  // Retourner le tableau contenant les cartes piochées
-  return drawCards
+  return drawnCards
 }
 
-// Déplace les chameaux de la main d'un joueur (_players[i].hand) vers son enclos (_players[i].camelsCount).
+// Transfer camels from players hand (_players[i].hand) to their herd (_players[i].camelsCount)
 export function putCamelsFromHandToHerd(game) {
-  // TODO
-  // Pour chaque joueur:
-  for(let i=0;i<2;i++)
-  {
-    for(let j=0;j<2;j++)
-    {
-      if(_players[i].hand[j]==="camel")
-      {
-        _players[i].hand.splice(j,1);
-        _players[i].camelsCount ++;
-      }
-
+  game._players.forEach((player) => {
+    let camelIndex = player.hand.findIndex((card) => card === "camel")
+    while (camelIndex !== -1) {
+      player.hand.splice(camelIndex, 1)
+      player.camelsCount++
+      camelIndex = player.hand.findIndex((card) => card === "camel")
     }
-
-  }
-  //  Pour chaque chameau dans la main du joueur
-  //  Enlever le chameau de la main et le mettre dans l'enclos
+  })
 }
 
-// Créer un objet game.
+// Create a game object
 export function createGame(name) {
-  
   const deck = initDeck()
   const market = ["camel", "camel", "camel", ...drawCards(deck, 2)]
   const game = {
