@@ -2,12 +2,7 @@ import * as db from "../database"
 import { shuffle } from "lodash"
 
 
-function melangerTableau(tableau) {
-  for (let i = tableau.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [tableau[i], tableau[j]] = [tableau[j], tableau[i]];
-  }
-}
+
 // Créer et retourne un deck mélangé avec 3 chameaux en moins.
 export function initDeck() {
   // TODO
@@ -41,24 +36,43 @@ export function initDeck() {
   }
 
   deck.push("camel")
-  melangerTableau(deck);
   // Retourner le tableau remplis
-  return deck
-}
+  return shuffle(deck)}
 
 // Pioche x cartes d'un deck.
 export function drawCards(deck, count = 1) {
   // TODO
   // Créer un tableau vide
+  let drawCards=[]
   // Pour chaque carte à piocher:
-  //  Retirer la carte piochée du deck et la mettre dans le tableau
+  for(leti=0;i<count;i++)
+  {
+    //  Retirer la carte piochée du deck et la mettre dans le tableau
+    drawCards.push(deck.pop())
+
+  }
+  
   // Retourner le tableau contenant les cartes piochées
+  return drawCards
 }
 
 // Déplace les chameaux de la main d'un joueur (_players[i].hand) vers son enclos (_players[i].camelsCount).
 export function putCamelsFromHandToHerd(game) {
   // TODO
   // Pour chaque joueur:
+  for(let i=0;i<2;i++)
+  {
+    for(let j=0;j<2;j++)
+    {
+      if(_players[i].hand[j]==="camel")
+      {
+        _players[i].hand.splice(j,1);
+        _players[i].camelsCount ++;
+      }
+
+    }
+
+  }
   //  Pour chaque chameau dans la main du joueur
   //  Enlever le chameau de la main et le mettre dans l'enclos
 }
