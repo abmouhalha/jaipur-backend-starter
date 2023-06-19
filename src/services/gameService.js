@@ -68,3 +68,11 @@ export function createGame(name) {
   db.saveGame(game)
   return game
 }
+
+
+export function findAllActiveGames()
+{
+  const games = db.getGames();
+  const gamesBis = games.map(user => [user.id , user.name])
+  return gamesBis;
+}
